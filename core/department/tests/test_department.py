@@ -19,10 +19,10 @@ class DepartmentViewTests(APITestCase):
 
         self.set_tenant_header(self.tenant.domain)
 
-        # Organization under this tenant
+        
         self.organization = Organization.objects.create(name="Org A", tenant=self.tenant)
 
-        # URL endpoints
+       
         self.department_list_url = reverse('department-list')
         self.department_detail_url = lambda dep_id: reverse('department-detail', kwargs={'id': dep_id})
 

@@ -1,8 +1,8 @@
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.contrib.auth.models import User
-from ..models import Organization  # assuming you have a Tenant model
-from tenant.models import Tenant_User  # assuming you have a Tenant model
+from ..models import Organization  
+from tenant.models import Tenant_User  
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 
@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 class OrganizationViewTests(APITestCase):
 
     def setUp(self):
-        # Create a user and tenant
+       
         self.user = User.objects.create_user(username='testuser', password='password')
         self.tenant = Tenant_User.objects.create(
             tenant_id=6,
@@ -21,11 +21,11 @@ class OrganizationViewTests(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
-        # Mock tenant middleware by patching request.tenant manually
+        
         self.client.force_authenticate(user=self.user)
-        self.client.tenant = self.tenant  # Simulate tenant middleware
+        self.client.tenant = self.tenant  
 
-        # Common URL paths
+        
         self.org_list_url = reverse('organization-list')
         self.org_detail_url = lambda org_id: reverse('organization-detail', kwargs={"id": org_id})
 
@@ -36,7 +36,7 @@ class OrganizationViewTests(APITestCase):
     def test_get_organization_list_success(self):
         self.set_tenant_header(self.tenant.domain)
         
-        print("*****************",self.id)  # Set the tenant header
+        
         Organization.objects.create(name="Org1", tenant=self.tenant)
         Organization.objects.create(name="Org2", tenant=self.tenant)
 
@@ -45,7 +45,7 @@ class OrganizationViewTests(APITestCase):
         self.assertEqual(len(response.data), 2)
 
     def test_get_organization_list_no_tenant(self):
-        self.set_tenant_header("invalid-domain.com")  # Simulate invalid or unrecognized tenant
+        self.set_tenant_header("invalid-domain.com")  
         response = self.client.get(self.org_list_url)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

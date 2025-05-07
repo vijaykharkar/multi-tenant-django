@@ -6,7 +6,7 @@ from .serializers import CustomerSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from department.models import Department 
-# from core.permissions import IsTenantUser
+
 
 class CustomerListCreateView(APIView):
     permission_classes = [IsAuthenticated]

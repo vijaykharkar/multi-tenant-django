@@ -23,12 +23,12 @@ class CustomerViewTests(APITestCase):
 
         self.set_tenant_header(self.tenant.domain)
 
-        # Create organization and department under this tenant
+       
         self.organization = Organization.objects.create(name="Org A", tenant=self.tenant)
         self.department = Department.objects.create(name="HR", organization=self.organization)
 
-        # URL endpoints
-        self.customer_list_url = reverse('customer-list')  # Adjust to your actual URL name
+       
+        self.customer_list_url = reverse('customer-list')  
         self.customer_detail_url = lambda customer_id: reverse('customer-detail', kwargs={'id': customer_id})
 
     def set_tenant_header(self, domain):
@@ -36,7 +36,7 @@ class CustomerViewTests(APITestCase):
                                 HTTP_X_TENANT_DOMAIN=domain)
 
     def test_get_customer_list_success(self):
-        # Create customers
+       
         Customer.objects.create(name="John Doe", email="john@example.com", phone="1234567890", department=self.department)
         Customer.objects.create(name="Jane Doe", email="jane@example.com", phone="0987654321", department=self.department)
 
@@ -81,6 +81,6 @@ class CustomerViewTests(APITestCase):
         self.assertEqual(response.data['error'], "Tenant not found.")
 
     def test_get_customer_detail_not_found(self):
-        response = self.client.get(self.customer_detail_url(9999))  # Non-existing customer ID
+        response = self.client.get(self.customer_detail_url(9999))  
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
